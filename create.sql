@@ -29,6 +29,7 @@ CREATE TABLE order (
     transaction VARCHAR(255) NOT NULL,
     shipping_price  INT NOT NULL,
     quantity INT NOT NULL,
-    FOREIGN KEY (id, quantity) REFERENCES product(id)
+    FOREIGN KEY (quantity) REFERENCES product(id)
 )
+
 
