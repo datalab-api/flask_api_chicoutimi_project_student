@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "-------------------------------------"
 echo "install depedendancies python with pip"

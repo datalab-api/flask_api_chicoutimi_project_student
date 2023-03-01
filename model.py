@@ -158,10 +158,10 @@ def insert_table(table_name, data):
 
 
 # delete table from database 
-for table_name in ["product","credit_card","shipping_information","credit_card","transactions"]:
+for table_name in ["product","credit_card","shipping_information","credit_card","transactions","order"]:
     drop_table(table_name)
 
-drop_table("order")
+
 
 # create table in database
 create_table_product()

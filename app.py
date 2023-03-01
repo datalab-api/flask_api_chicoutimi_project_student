@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 
 from .model import headers, connect_to_db
-from .services import add_product, get_product_by_id, get_products, add_order
+from .services import (add_product, get_product_by_id, get_products, add_orders, api_get_orders)
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -13,15 +13,9 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # ENDPOINT PRODUCT 
 # endpoint product 
 @app.route("/", methods=['GET'])
-def api_product_home():
+def api_product_all():
     return Response(json.dumps({"products": get_products()}),
                         status=200, mimetype='application/json')
-
-@app.route('/api/v1/products', methods=['GET'])
-def api_products():
-    return Response(json.dumps({"products": get_products()}),
-                        status=200, mimetype='application/json')
-    #return jsonify({"products": get_products()})
 
 @app.route('/api/v1/products/<int:id>', methods=['GET'])
 def api_get_products(id):
@@ -37,8 +31,20 @@ def api_add_product():
 
 
 
-
 # ENDPOINT ORDER
+#methode d'api get_by_orders (14)
+
+@app.route('/api/v1/orders/<int:id>', methods=['GET'])
+def api_get_orders(id):
+    return Response(json.dumps(api_get_orders(id)),
+                        status=200, mimetype='application/json')
+# methode d'api qui permet d'ajouter un orders 
+@app.route('/api/v1/orders/add', methods=['POST'])
+def add_orders():
+    orders = request.get_json()
+    return Response(json.dumps(add_orders("orders", orders)),
+                        status=200, mimetype='application/json')
+
 @app.route('/order', methods=['POST'])
 def api_add_order():
     message= {}
