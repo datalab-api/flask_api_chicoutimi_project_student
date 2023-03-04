@@ -1,11 +1,10 @@
-
 #!/usr/bin/env python3
 import json
 #14
 from flask import Flask, jsonify
 import sqlite3
 
-from .model import headers, connect_to_db
+from .model import headers, connect_to_db, headers_orders
 app = Flask(__name__)
 #Add product
 
@@ -82,15 +81,9 @@ def get_products():
 
 
 
-def add_order(order):
-    response = {}
-    return response
+#get_order_by_id (14)
 
-
-
-#api_get_order_by_id (14)
-
-def api_get_orders(id):
+def get_orders_by_id(id):
     orders = {}    
     try:
         conn = connect_to_db()
@@ -100,7 +93,7 @@ def api_get_orders(id):
         index = row
         i = 0
         for j in index:
-            orders[headers[i]] = j
+            orders[headers_orders[i]] = j
             #print(headers[i]+": {}".format(orders[headers[i]]))
             i+=1        
     except:
@@ -139,61 +132,23 @@ def add_orders(table_name, data):
         conn.close()
     return insert_orders
 
-# @app.route('/api/v1/orders/<int:id>', methods=['GET'])
-# def api_get_orders(id):
-#     # récupérer les informations de commande de la base de données ou d'un autre endroit
-#     order_info = {
-#         "order": {
-#             "id": 6543,
-#             "total_price": 9148,
-#             "email": None,
-#             "credit_card": {},
-#             "shipping_information": {},
-#             "paid": False,
-#             "transaction": {},
-#             "product": {
-#                 "id": 123,
-#                 "quantity": 1
-#             },
-#             "shipping_price": 1000
-#         }
-#     }
-# filtrer les informations de commande pour ne retourner que celles correspondant à l'ID de la commande demandée
-#    order = order_info.get("order", {})
-#   if order.get("id") != id:
-#        return jsonify({"error": "Order not found"}), 404
-#    
-#   return jsonify(order), 200
-#
-#Add_order
+#Get_orders
 
+def get_orders():
+    orders = []
+    try:
+        conn = connect_to_db()
+        rows = conn.execute("SELECT * FROM orders").fetchall()        
+        for item in rows:
+            order = {}
 
-# def add_orders(table_name, data):
-#     # Connexion à la base de données
-#     conn = sqlite3.connect('ma_base_de_donnees.db')
-#     cursor = conn.cursor()
-
-#     # Construction de la requête SQL d'insertion
-#     query = f"INSERT INTO {table_name} (id, total_price, email, credit_card, shipping_information, paid, transaction, product_id, product_quantity, shipping_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-#     values = (
-#         data['order']['id'], 
-#         data['order']['total_price'], 
-#         data['order']['email'], 
-#         str(data['order']['credit_card']), 
-#         str(data['order']['shipping_information']), 
-#         data['order']['paid'], 
-#         str(data['order']['transaction']), 
-#         data['order']['product']['id'], 
-#         data['order']['product']['quantity'], 
-#         data['order']['shipping_price']
-#     )
-
-#     # Exécution de la requête
-#     cursor.execute(query, values)
-
-#     # Validation de la transaction
-#     conn.commit()
-
-#     # Fermeture de la connexion à la base de données
-#     conn.close()
-
+            index = item
+            i = 0
+            for j in index:
+                order[headers_orders[i]] = j
+                #print(headers[i]+": {}".format(product[headers[i]]))
+                i+=1
+            orders.append(order)  
+    except :
+        orders = []
+    return orders

@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 
 from .model import headers, connect_to_db
-from .services import (add_product, get_product_by_id, get_products, add_orders, api_get_orders)
+from .services import (add_product, get_product_by_id, get_products, get_orders_by_id, get_orders)
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -34,15 +34,37 @@ def api_add_product():
 # ENDPOINT ORDER
 #methode d'api get_by_orders (14)
 
-@app.route('/api/v1/orders/<int:id>', methods=['GET'])
-def api_get_orders(id):
-    return Response(json.dumps(api_get_orders(id)),
-                        status=200, mimetype='application/json')
-# methode d'api qui permet d'ajouter un orders 
-@app.route('/api/v1/orders/add', methods=['POST'])
-def add_orders():
-    orders = request.get_json()
-    return Response(json.dumps(add_orders("orders", orders)),
+@app.route('/api/v1/orders/<int:order_id>', methods=['GET'])
+def api_get_orders_by_id(order_id):
+    Response = {}
+    resultat = get_orders_by_id(order_id)
+    if order_id is None or resultat == None:
+        message = Response(json.dumps({message:"Commande inexistante"}),
+                        status=404, mimetype='application/json')
+    else:
+       
+        if  resultat['email'] is None or resultat['shipping_information'] is None or \
+            resultat['shipping_information']['country'] is None or \
+            resultat['shipping_information']['address'] is None or \
+            resultat['shipping_information']['postal_code'] is None or \
+            resultat['shipping_information']['city'] is None or \
+            resultat['shipping_information']['province'] is None:
+            info = {
+        "errors": {
+            "order": {
+                "code": "missing-fields",
+                "name": "Il manque un ou plusieurs champs qui sont obligatoires",
+            }
+        }
+    }
+    message = Response(
+        json.dumps(info), status=422, mimetype='application/json')
+
+    return message
+
+@app.route("/", methods=['GET'])
+def api_orders_all():
+    return Response(json.dumps({"products": get_orders()}),
                         status=200, mimetype='application/json')
 
 @app.route('/order', methods=['POST'])
@@ -72,10 +94,7 @@ def api_add_order():
                     order= {}
                     product = {}
                     i = 0
-                    for j in index:
-                        product[headers[i]] = j
-                        #print(headers[i]+": {}".format(product[headers[i]]))
-                        i+=1
+                   
                     
 
 
