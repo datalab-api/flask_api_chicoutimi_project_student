@@ -26,10 +26,11 @@ CREATE TABLE order (
     credit_card_   TEXT,
     shipping_information VARCHAR(255) ,
     paid BOOLEAN ,
-    transaction VARCHAR(255) NOT NULL,
+    transactions VARCHAR(255) NOT NULL,
     shipping_price  INT NOT NULL,
     quantity INT NOT NULL,
-    FOREIGN KEY (quantity) REFERENCES product(id)
+    product_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_product) REFERENCES product(id)
 )
 
 
