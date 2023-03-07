@@ -111,9 +111,12 @@ def add_orders(table_name, data):
         #    VALUES ("{data["name"]}", "{data["in_stock"]}", "{data["descriptions"]}", "{data["price"]}","{data["weight"]}","{data["image"]}");'
 
         #cur.execute(sql_string)
+        price = conn.execute("SELECT price FROM product WHERE id = {}".format(data['product_id'])).fetchone()
+        total_price = data['product_quantity']*price
 
+        
         sql_string = "INSERT INTO orders (id, total_price, email, credit_card, shipping_information, paid, transaction, product_id, product_quantity, shipping_price) VALUES (?,?,?,?,?,?,?,?,?,?)"
-        sql_data = (data['id'], data['total_price'], data['email'], data['credit_card'], data['shipping_information'], data['paid'], data['transaction'], data['product_id'], data['product_quantity'], data['shipping_price'])
+        sql_data = (data['id'], total_price, data['email'], data['credit_card'], data['shipping_information'], data['paid'], data['transaction'], data['product_id'], data['product_quantity'], data['shipping_price'])
         print("insert data : {}".format(data))
         cur.execute(sql_string,data)        
         conn.commit()
