@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
-import sqlite3
+import os
 import json
+import psycopg2
+from psycopg2 import Error
+
 
 headers = ["id","name","in_stock","descriptions","price","weight","image"]
 
 
 def connect_to_db ():
-    conn = sqlite3.connect('database.db')
-    return conn
+    try:
+        conn = psycopg2.connect(user=os.getenv("DB_USER"), password=os.getenv("DB_PASSWORD"),
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"))
+        return conn
+    except (Exception, Error) as error:
+        return ("Error while connecting to PostgreSQL", error)
 
 
 def drop_table(table_name):
