@@ -173,10 +173,10 @@ for table_name in ["product","credit_card","shipping_information","credit_card",
 
 
 # create table in database
-create_table_product()
-create_table_shipping_information()
-create_table_credit_card()
-create_table_transaction()
-create_table_order()
-response=init_product_db()
-print(response)
+# create_table_product()
+# create_table_shipping_information()
+# create_table_credit_card()
+# create_table_transaction()
+# create_table_order()
+# response=init_product_db()
+# print(response)

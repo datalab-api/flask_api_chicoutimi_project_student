@@ -2,14 +2,16 @@ version: '3.4'
 
 services:
   postgres:
-    container_name: postgres_container
+    container_name: postgres
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pass}
+      POSTGRES_DB: ${POSTGRES_DB:-api8inf349}
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     networks:
@@ -17,7 +19,7 @@ services:
     restart: unless-stopped
   
   pgadmin:
-    container_name: pgadmin_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
@@ -32,12 +34,26 @@ services:
       - postgres
     restart: unless-stopped
   traore14:
-    image: traore14:1.0
+    container_name: application_web
+    image: flask_api:1.0.0
     ports:
       - 5000:5000
     environment:
       DB_HOST: postgres
-      DB_USER: ${POSTGRES_USER}
+      DB_USER: user
+      DB_PASSWORD: pass    
+      DB_NAME: api8inf349
+      REDIS_URL: redis://cache
+    networks:
+      - postgres
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data
     networks:
       - postgres
 
@@ -48,4 +64,5 @@ networks:
 volumes:
     postgres:
     pgadmin:
+    cache:
   

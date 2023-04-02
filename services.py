@@ -4,8 +4,11 @@ import json
 from flask import Flask, jsonify
 import sqlite3
 
-from .model import headers, connect_to_db, headers_orders
-app = Flask(__name__)
+headers = ["id","name","in_stock","descriptions","price","weight","image"]
+
+from app.model import  connect_to_db, headers_orders
+
+#app = Flask(__name__)
 #Add product
 
 def add_product(table_name, data):

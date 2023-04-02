@@ -5,8 +5,8 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import redis
 
-from .model import headers, connect_to_db
-from .services import (add_product, get_product_by_id, get_products, get_orders_by_id, get_orders)
+from app.model import  connect_to_db
+from app.services import (add_product, get_product_by_id, get_products, get_orders_by_id, get_orders)
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
