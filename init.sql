@@ -38,3 +38,41 @@ CREATE TABLE product (
     weight TEXT NOT NULL,
     image TEXT NOT NULL
 );
+
+CREATE TABLE create_table_shipping_information (
+    country TEXT PRIMARY KEY, 
+    address TEXT NOT NULL,
+    postal_code TEXT NOT NULL,
+    city TEXT NOT NULL,
+    province TEXT NOT NULL
+);
+
+CREATE TABLE credit_card (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    first_digits TEXT NOT NULL,
+    last_digits TEXT NOT NULL,
+    expiration_year INTEGER NOT NULL,
+    expiration_month INTEGER NOT NULL
+);
+
+CREATE TABLE transactions (
+    id TEXT PRIMARY KEY,
+    success TEXT NOT NULL,
+    amount_charged TEXT NOT NULL
+);
+
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY,
+    total_price INTEGER NOT NULL,
+    email TEXT NOT NULL,
+    credit_card TEXT ,
+    shipping_information TEXT,
+    paid TEXT ,
+    transactions TEXT NOT NULL,
+    shipping_price  INTEGER NOT NULL,
+    quantity INT NOT NULL,
+    product_id INTEGER NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product(id)
+);
+
