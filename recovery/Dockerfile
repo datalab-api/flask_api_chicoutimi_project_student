@@ -1,5 +1,5 @@
-FROM alpine:latest
-
+# For more information, please refer to https://aka.ms/vscode-docker-python
+FROM python:3.8-slim-buster
 
 
 # expect a build-time variable
@@ -17,7 +17,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-
 # add vars env app
 ENV FLASK_DEBUG=${FLASK_DEBUG:-True}
 ENV FLASK_APP=${FLASK_APP:-api8inf349}
@@ -31,18 +30,23 @@ ENV DB_NAME=${DB_NAME:-api8inf349}
 ENV REDIS_URL=${REDIS_URL:-redis://localhost}
 
 
-RUN apk add --no-cache python3-dev \
-    && python3 -m ensurepip \
-    && pip3 install --upgrade pip
+# Install pip requirements
 
-WORKDIR /app
-
-COPY services.py /app
-COPY main.py /app
+WORKDIR ${FLASK_APP}
 
 COPY requirements.txt ./requirements.txt
-RUN pip3 --no-cache-dir install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt
+
+COPY main.py ${FLASK_APP}
+COPY services.py ${FLASK_APP}
+
+USER root
 
 EXPOSE 5000
 
-CMD ["python3", "main.py"]
+CMD [ "python3", "main.py" ]
+
+
+#CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+
+

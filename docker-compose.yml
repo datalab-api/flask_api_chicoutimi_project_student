@@ -33,11 +33,15 @@ services:
     networks:
       - postgres
     restart: unless-stopped
-  traore14:
-    container_name: application_web
-    image: flask_api:1.0.0
+  web:
+    container_name: web
+    image: web:3.0.0
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
+      - 9007:9007
     environment:
       DB_HOST: postgres
       DB_USER: user

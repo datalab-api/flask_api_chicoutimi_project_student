@@ -1,15 +1,35 @@
 #!/usr/bin/env python3
 import json
-#14
+import os
 from flask import Flask, jsonify
-import sqlite3
+import psycopg2
+from psycopg2 import Error
+
 
 headers = ["id","name","in_stock","descriptions","price","weight","image"]
 
-from app.model import  connect_to_db, headers_orders
+# function to connect
+def connect_to_db ():
+    try:
+        conn = psycopg2.connect(user=os.getenv("DB_USER"), password=os.getenv("DB_PASSWORD"),
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"))
+        return conn
+    except (Exception, Error) as error:
+        return ("Error while connecting to PostgreSQL", error)
 
-#app = Flask(__name__)
-#Add product
+# function to drop table
+def drop_table(table_name):
+    try:
+        conn = connect_to_db()
+        conn.execute("DROP TABLE IF EXISTS {}".format(table_name))
+        print("Table {} dropped".format(table_name))
+    except:
+        print("Table {} does not exist".format(table_name))
+    finally:
+        conn.close()
+
 
 def add_product(table_name, data):
     insert_product= {}
@@ -96,7 +116,7 @@ def get_orders_by_id(id):
         index = row
         i = 0
         for j in index:
-            orders[headers_orders[i]] = j
+            #orders[headers_orders[i]] = j
             #print(headers[i]+": {}".format(orders[headers[i]]))
             i+=1        
     except:

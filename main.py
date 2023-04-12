@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 import os 
 import  json
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, Response
 from flask_cors import CORS
 import redis
 
-from app.model import  connect_to_db
-from app.services import (add_product, get_product_by_id, get_products, get_orders_by_id, get_orders)
+from services import connect_to_db,add_product, get_product_by_id, get_products, get_orders_by_id, get_orders
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-Redis = redis.from_url(url= os.getenv("ARG REDIS_URL"))
+#Redis = redis.from_url(url= os.getenv("REDIS_URL"))
 
 # ENDPOINT PRODUCT 
 # endpoint product 
