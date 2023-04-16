@@ -33,15 +33,14 @@ services:
     networks:
       - postgres
     restart: unless-stopped
-  web:
-    container_name: web
-    image: web:3.0.0
-    build: 
-      context: .
-      dockerfile: Dockerfile
+  api8inf349:
+    container_name: api8inf349
+    image: api8inf349:latest
+    # build: 
+    #   context: .
+    #   dockerfile: Dockerfile
     ports:
-      - 5000:5000
-      - 9007:9007
+      - '0.0.0.0:5000:5000'
     environment:
       DB_HOST: postgres
       DB_USER: user
